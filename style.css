@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#viewer-container {
+    position: relative; /* Makes sure child elements position correctly */
+    width: 100%;
+    height: 100%;
+    background-color: black; /* Ensure a good contrast */
+}
+
+.viewer-title {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,98,105, 1);
+    color: rgba(255, 255, 255, 1);
+    padding: 16px 32px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 15px;
+    z-index: 500; /* Ensures the title is above the 3D viewer */
+    pointer-events: none; /* Prevents interference with clicks */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.viewer-title:hover{
+    opacity: 1;
+}
+
+.bottom-left-logo {
+    position: fixed; /* Keeps it in place even when scrolling */
+    bottom: 20px; /* Distance from the bottom */
+    left: 20px; /* Distance from the left */
+    width: 60px; /* Adjust the size as needed */
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.5; /* Slight transparency for a smooth look */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.bottom-left-logo:hover {
+    opacity: 1; /* Make it fully visible when hovered */
+}
+
+.tu-delft-logo {
+    position: fixed; /* Keeps it in place even when scrolling */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+    width: 60px; /* Adjust the size as needed */
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.5; /* Slight transparency for a smooth look */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tu-delft-logo:hover {
+    opacity: 1; /* Make it fully visible when hovered */
+}
+
+.gdmc-logo {
+    position: fixed; /* Keeps it in place even when scrolling */
+    bottom: 20px; /* Distance from the bottom */
+    margin-left: auto;
+    margin-right: auto;
+    width: 60px; /* Adjust the size as needed */
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.5; /* Slight transparency for a smooth look */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.gdmc-logo:hover {
+    opacity: 1; /* Make it fully visible when hovered */
+}
