@@ -3,13 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VTK.js 3D Viewer</title>
-    <link rel="icon" type="image/x-icon" href="/assets/logo-Cq2Sgpar.ico">
-    <!-- <link rel="stylesheet" href="styles.css"> -->
-  <script type="module" crossorigin src="/assets/index-gVpWEO1m.js"></script>
+    <link rel="icon" href="/unscanned_areas.github.io/assets/logo-CcnZo-xa.png">
+  <script type="module" crossorigin src="/unscanned_areas.github.io/assets/index-B0jtbKuG.js"></script>
+  <link rel="stylesheet" crossorigin href="/unscanned_areas.github.io/assets/index-B46rwmwi.css">
 </head>
 <body>
-    <h1>VTK.js 3D Viewer</h1>
-    <div id="viewer-container"></div>
+    
+    <div class="container">
+        <div id="viewer-container">
+            <div class="viewer-title">Identification and Visualization of Unscanned Areas Within a Building
+                Based on the Building’s Outer Hull Project</div>
+        </div>
+    </div>
+    <div class="collapsible-container">
+        <button class="collapsible-btn">ℹ️ Instructions</button>
+        <div class="collapsible-content">
+            <p><b>Controls:</b></p>
+            <ul>
+                <li>🖱️ <b>Left-click & Drag</b>: Rotate</li>
+                <li>🖱️ <b>Shift + Left-click</b>: Pan</li>
+                <li>🖱️ <b>Ctrl + Left-click</b>: Rotate 2D</li>
+                <li>🔍 <b>Scroll Wheel</b>: Zoom</li>
+                <li>📦 <b>Toggle Layers</b>: Use checkboxes in the control panel</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+    <a href="https://github.com/IlioTheG/unscanned_areas.github.io" target="_blank">
+        <img src="/unscanned_areas.github.io/assets/logo-CcnZo-xa.png" alt="Logo" class="bottom-left-logo">
+    </a>
+    <img src="/unscanned_areas.github.io/assets/TUDelft_logo_white-eDBUwL4j.png" alt="Logo" class="tu-delft-logo">
+    <a href="https://www.gdmc.nl/" target="_blank"> <img src="data:image/png;base64,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" alt="Logo" class="gdmc-logo"> </a>
+    </footer>
+
 </body>
 </html>
+
