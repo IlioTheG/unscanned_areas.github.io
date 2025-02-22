@@ -7,17 +7,36 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+    
     <div class="container">
         <div id="viewer-container">
             <div class="viewer-title">Identification and Visualization of Unscanned Areas Within a Building
                 Based on the Building’s Outer Hull Project</div>
         </div>
     </div>
-    <img src="/public/images/logo.png" alt="Logo" class="bottom-left-logo">
+    <div class="collapsible-container">
+        <button class="collapsible-btn">ℹ️ Instructions</button>
+        <div class="collapsible-content">
+            <p><b>Controls:</b></p>
+            <ul>
+                <li>🖱️ <b>Left-click & Drag</b>: Rotate</li>
+                <li>🖱️ <b>Shift + Left-click</b>: Pan</li>
+                <li>🖱️ <b>Ctrl + Left-click</b>: Rotate 2D</li>
+                <li>🔍 <b>Scroll Wheel</b>: Zoom</li>
+                <li>📦 <b>Toggle Layers</b>: Use checkboxes in the control panel</li>
+            </ul>
+        </div>
+    </div>
+    <script type="module" src="main.js"></script>
+    
+    <footer>
+    <a href="https://github.com/IlioTheG/unscanned_areas.github.io" target="_blank">
+        <img src="/public/images/logo.png" alt="Logo" class="bottom-left-logo">
+    </a>
     <img src="/public/images/TUDelft_logo_white.png" alt="Logo" class="tu-delft-logo">
     <a href="https://www.gdmc.nl/" target="_blank"> <img src="/public/images/GDMC-LOGO12.png" alt="Logo" class="gdmc-logo"> </a>
-    
-    <script type="module" src="main.js"></script>
+    </footer>
+
 </body>
 </html>
 

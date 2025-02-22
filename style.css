@@ -25,20 +25,17 @@ body {
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,98,105, 1);
-    color: rgba(255, 255, 255, 1);
+    background: rgba(173, 173, 173, 0.486);
+    color: rgb(0, 0, 0);
     padding: 16px 32px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 15px;
     z-index: 500; /* Ensures the title is above the 3D viewer */
     pointer-events: none; /* Prevents interference with clicks */
-    transition: opacity 0.3s ease-in-out;
+    opacity: 0.6;
 }
 
-.viewer-title:hover{
-    opacity: 1;
-}
 
 .bottom-left-logo {
     position: fixed; /* Keeps it in place even when scrolling */
@@ -81,4 +78,132 @@ body {
 
 .gdmc-logo:hover {
     opacity: 1; /* Make it fully visible when hovered */
+}
+
+.legend-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #fff;
+}
+
+/* Assign specific colors */
+/* .pointcloud-color { background-color: #ff0000; } Red */
+.mesh-color { background-color: maroon; } /* Green */
+/* .scanned-color { background-color: #0000ff; } Blue */
+.voidvoxels-color { background-color: #a782ba; } /* Yellow */
+.unknownvoxels-color { background-color: #4aab74; } /* Magenta */
+.buildinghull-color {background-color: gainsboro;}
+
+.circular-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    display: inline-block;
+    border: 1px solid #fff;
+    background: 
+    conic-gradient(
+        maroon 0deg, maroon 90deg,
+        darkcyan 90deg, darkcyan 180deg,
+        darkgreen 180deg, darkgreen 270deg,
+        olive 270deg, olive 360deg
+    );
+}
+
+.quadrant-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 0px;
+    display: inline-block;
+    border: 0px solid #fff;
+    background: 
+    conic-gradient(
+        maroon 0deg, maroon 90deg,
+        darkcyan 90deg, darkcyan 180deg,
+        darkgreen 180deg, darkgreen 270deg,
+        olive 270deg, olive 360deg
+    );
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Style the collapsible box */
+.collapsible-container {
+    position: fixed;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    width: 300px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px 0 0 8px;
+    overflow: hidden;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+}
+
+/* Style the button */
+.collapsible-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.9s;
+}
+
+.collapsible-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Style the collapsible content */
+.collapsible-content {
+    padding: 10px;
+    display: none; /* Initially hidden */
+    color: white;
+    font-size: 14px;
+}
+
+/* Smooth opening animation */
+.collapsible-container.open .collapsible-content {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Fade-in effect */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ensure checkboxes are left-aligned */
+.control-panel table {
+    width: 100%;
+}
+
+.control-panel td {
+    text-align: left; /* Aligns text & checkboxes to the left */
+    padding: 5px;
+}
+
+/* Ensure checkboxes and labels are inline */
+.control-panel label {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adds space between checkbox and text */
+}
+
+/* Fix checkbox positioning */
+.control-panel input[type="checkbox"] {
+    margin: 0;
+}
+
+.legend-line {
+    display: block;
+    background: transparent;
 }
