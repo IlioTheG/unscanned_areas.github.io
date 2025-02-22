@@ -7,6 +7,7 @@ import vtkPolyData from '@kitware/vtk.js/Common/DataModel/PolyData';
 import vtkPoints from '@kitware/vtk.js/Common/Core/Points';
 import vtkCellArray from '@kitware/vtk.js/Common/Core/CellArray';
 
+import { showLoadingScreen, hideLoadingScreen } from './loadingManager.js';
 
 // UI control panel
 const controlPanel = `
@@ -71,6 +72,7 @@ const renderWindow = fullScreenRenderer.getRenderWindow();
  * @param {boolean} isVisible - Whether the actor should be visible on first render.
  */
 function loadPLYFile(filename, opacity, toggleClass, sliderId, representation = 2, lineWidth=1, isVisible = true) {
+    showLoadingScreen();
     const reader = vtkPLYReader.newInstance();
     const basePath = import.meta.env.BASE_URL || '/'; // Default to root `/` if not set
     const modelPath = `${basePath}models/${filename}`; // Correctly join paths
@@ -109,7 +111,11 @@ function loadPLYFile(filename, opacity, toggleClass, sliderId, representation = 
                 renderWindow.render();
             });
         }
-    }).catch(error => console.error(`Error loading ${url}:`, error));
+        hideLoadingScreen();
+    }).catch(error => {
+        console.error(`Error loading ${filename}:`, error);
+        hideLoadingScreen();
+        document.getElementById("loading-screen").innerHTML = "<p>⚠️ Error loading model</p>";});
 }
 
 /**
@@ -182,6 +188,7 @@ function addGroupedControl(label, actors, toggleClass, sliderId) {
  * @param {boolean} isVisible - Whether the actors should be visible on first render.
  */
 function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1], pointSize = 5, pointColor = [1, 0, 0], isVisible = true) {
+    showLoadingScreen();
     const basePath = import.meta.env.BASE_URL || '/'; // Default to root `/` if not set
     const modelPath = `${basePath}models/${filename}`; // Correctly join paths
     const reader = vtkPLYReader.newInstance();
@@ -258,7 +265,12 @@ function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1
 
         // --- Add UI Control for Both Actors ---
         addGroupedControl("Camera trajectory", [lineActor, pointActor], "toggleLinePoints", "opacity-slider-linepoints");
-    }).catch(error => console.error(`Error loading PLY file:`, error));
+        hideLoadingScreen();
+    }).catch(error => {
+        console.error(`Error loading PLY file:`, error);
+        hideLoadingScreen();
+        document.getElementById('loading-screen').innerHTML = "<p>⚠️ Error loading model</p>";
+    });
 }
 
 
