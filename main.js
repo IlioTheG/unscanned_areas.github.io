@@ -24,12 +24,12 @@ const controlPanel = `
         </tr>
         <tr>
             <td><div class="legend-box mesh-color"></div></td>
-            <td><label><input type="checkbox" class="toggleMesh" checked /> Mesh voxels</label></td>
+            <td><label><input type="checkbox" class="toggleMesh" /> Mesh voxels</label></td>
             <td><input type="range" id="opacity-slider-mesh-voxels" min="0" max="1" step="0.1" value="0.1"></td>
         </tr>
         <tr>
             <td><div class="quadrant-box scanned-color"></div></td>
-            <td><label><input type="checkbox" class="toggleScanned" checked /> Scanned voxel</label></td>
+            <td><label><input type="checkbox" class="toggleScanned" /> Scanned voxel</label></td>
             <td><input type="range" id="opacity-slider-scanned" min="0" max="1" step="0.1" value="0.9"></td>
         </tr>
         <tr>
@@ -70,9 +70,11 @@ const renderWindow = fullScreenRenderer.getRenderWindow();
  * @param {number} representation - Representation mode (0 = Points, 1 = Wireframe, 2 = Surface).
  * @param {boolean} isVisible - Whether the actor should be visible on first render.
  */
-function loadPLYFile(url, opacity, toggleClass, sliderId, representation = 2, lineWidth=1, isVisible = true) {
+function loadPLYFile(filename, opacity, toggleClass, sliderId, representation = 2, lineWidth=1, isVisible = true) {
     const reader = vtkPLYReader.newInstance();
-    reader.setUrl(url).then(() => {
+    const basePath = import.meta.env.BASE_URL || '/'; // Default to root `/` if not set
+    const modelPath = `${basePath}models/${filename}`; // Correctly join paths
+    reader.setUrl(modelPath).then(() => {
         const polydata = reader.getOutputData();
         const mapper = vtkMapper.newInstance();
         mapper.addInputData(polydata);
@@ -182,7 +184,6 @@ function addGroupedControl(label, actors, toggleClass, sliderId) {
 function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1], pointSize = 5, pointColor = [1, 0, 0], isVisible = true) {
     const basePath = import.meta.env.BASE_URL || '/'; // Default to root `/` if not set
     const modelPath = `${basePath}models/${filename}`; // Correctly join paths
-    console.log(modelPath);
     const reader = vtkPLYReader.newInstance();
     reader.setUrl(modelPath).then(() => {
         const polyData = reader.getOutputData();
@@ -294,13 +295,12 @@ function drawLegendLine(canvas, color) {
 }
 
 // Load PLY files with correct representation modes and initial visibility
-loadPLYFile('/public/models/pointcloud2.ply', 1.0, 'togglePointCloud', 'opacity-slider-pointcloud', 0, 0, true); // Points, visible
-loadPLYFile('/public/models/Scanned.ply', 0.9, 'toggleScanned', 'opacity-slider-scanned', 2, 0, true); // Surface, visible
-loadPLYFile('/public/models/mesh.ply', 0.1, 'toggleMesh', 'opacity-slider-mesh-voxels', 2, 0, false); // Surface, initially hidden
-loadPLYFile('/public/models/Seen.ply', 0.4, 'toggleVoidVoxels', 'opacity-slider-void-voxels', 2, 0, false); // Surface, initially hidden
-loadPLYFile('/public/models/Unknown.ply', 0.4, 'toggleUnknownVoxels', 'opacity-slider-unknown-voxels', 2, 0, false); // Surface, initially hidden
-loadPLYFile('/public/models/hull_new.ply', 0.4, 'toggleHull', 'opacity-slider-building-hull', 2, 0, false); // Surface, initially hidden
-// loadPLYFile('/public/models/camera_line2.ply', 1.0, 'toggleCamera', 'opacity-slider-camera-line', 1, 2, true); // Surface, initially hidden
+loadPLYFile('pointcloud2.ply', 1.0, 'togglePointCloud', 'opacity-slider-pointcloud', 0, 0, true); // Points, visible
+loadPLYFile('Scanned.ply', 0.9, 'toggleScanned', 'opacity-slider-scanned', 2, 0, false); // Surface, visible
+loadPLYFile('mesh.ply', 0.1, 'toggleMesh', 'opacity-slider-mesh-voxels', 2, 0, false); // Surface, initially hidden
+loadPLYFile('Seen.ply', 0.4, 'toggleVoidVoxels', 'opacity-slider-void-voxels', 2, 0, false); // Surface, initially hidden
+loadPLYFile('Unknown.ply', 0.4, 'toggleUnknownVoxels', 'opacity-slider-unknown-voxels', 2, 0, false); // Surface, initially hidden
+loadPLYFile('hull_new.ply', 0.4, 'toggleHull', 'opacity-slider-building-hull', 2, 0, false); // Surface, initially hidden
 loadPLYWithPointsAndLines('camera_line.ply', 1, [1, 1, 1], 3, [1, 0, 0])
 // Add UI controls
 fullScreenRenderer.addController(controlPanel);
