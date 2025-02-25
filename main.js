@@ -6,6 +6,7 @@ import vtkPLYReader from '@kitware/vtk.js/IO/Geometry/PLYReader';
 import vtkPolyData from '@kitware/vtk.js/Common/DataModel/PolyData';
 import vtkPoints from '@kitware/vtk.js/Common/Core/Points';
 import vtkCellArray from '@kitware/vtk.js/Common/Core/CellArray';
+import vtkPlane from '@kitware/vtk.js/Common/DataModel/Plane';
 
 import { showLoadingScreen, hideLoadingScreen } from './loadingManager.js';
 
@@ -61,6 +62,16 @@ const renderer = fullScreenRenderer.getRenderer();
 renderer.setBackground(0.2, 0.2, 0.2, 1);
 const renderWindow = fullScreenRenderer.getRenderWindow();
 
+// Create two clipping planes
+// Create two clipping planes
+const verticalClipPlane = vtkPlane.newInstance();
+verticalClipPlane.setNormal(1, 0, 0); 
+verticalClipPlane.setOrigin(-13, 0, 0);  // ✅ Set initial position of vertical clip plane
+
+const horizontalClipPlane = vtkPlane.newInstance();
+horizontalClipPlane.setNormal(0, 1, 0);
+horizontalClipPlane.setOrigin(0, -2, 0);  // ✅ Set initial position of horizontal clip plane
+
 
 /**
  * Function to load PLY files into the scene.
@@ -78,8 +89,16 @@ function loadPLYFile(filename, opacity, toggleClass, sliderId, representation = 
     const modelPath = `${basePath}models/${filename}`; // Correctly join paths
     reader.setUrl(modelPath).then(() => {
         const polydata = reader.getOutputData();
+
+        // ✅ Log the model bounds
+        const bounds = polydata.getBounds(); // [minX, maxX, minY, maxY, minZ, maxZ]
+        console.log(`Model Extents for ${filename}:`, bounds);
+
         const mapper = vtkMapper.newInstance();
         mapper.addInputData(polydata);
+
+        mapper.addClippingPlane(verticalClipPlane);   // ✅ Apply vertical clipping
+        mapper.addClippingPlane(horizontalClipPlane); // ✅ Apply horizontal clipping
         
         const actor = vtkActor.newInstance();
         actor.setMapper(mapper);
@@ -112,6 +131,10 @@ function loadPLYFile(filename, opacity, toggleClass, sliderId, representation = 
             });
         }
         hideLoadingScreen();
+        setTimeout(() => {
+            renderer.resetCamera();  // Ensure the camera resets to include the model
+            renderWindow.render();   // Manually refresh the rendering pipeline
+        }, 100);
     }).catch(error => {
         console.error(`Error loading ${filename}:`, error);
         hideLoadingScreen();
@@ -224,6 +247,9 @@ function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1
         const lineMapper = vtkMapper.newInstance();
         lineMapper.setInputData(polyDataWithLines);
 
+        lineMapper.addClippingPlane(verticalClipPlane);   // ✅ Apply vertical clipping
+        lineMapper.addClippingPlane(horizontalClipPlane); // ✅ Apply horizontal clipping
+
         const lineActor = vtkActor.newInstance();
         lineActor.setMapper(lineMapper);
         lineActor.getProperty().setColor(...lineColor); // Set line color
@@ -250,6 +276,9 @@ function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1
         const pointMapper = vtkMapper.newInstance();
         pointMapper.setInputData(polyDataWithPoints);
 
+        pointMapper.addClippingPlane(verticalClipPlane);   // ✅ Apply vertical clipping
+        pointMapper.addClippingPlane(horizontalClipPlane); // ✅ Apply horizontal clipping
+
         const pointActor = vtkActor.newInstance();
         pointActor.setMapper(pointMapper);
         pointActor.getProperty().setColor(...pointColor); // Set point color
@@ -266,6 +295,10 @@ function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1
         // --- Add UI Control for Both Actors ---
         addGroupedControl("Camera trajectory", [lineActor, pointActor], "toggleLinePoints", "opacity-slider-linepoints");
         hideLoadingScreen();
+        setTimeout(() => {
+            renderer.resetCamera();  // Ensure the camera resets to include the model
+            renderWindow.render();   // Manually refresh the rendering pipeline
+        }, 100);
     }).catch(error => {
         console.error(`Error loading PLY file:`, error);
         hideLoadingScreen();
@@ -306,6 +339,46 @@ function drawLegendLine(canvas, color) {
     });
 }
 
+function addClipPlaneControlPanel() {
+    const clipPanel = document.createElement("div");
+    clipPanel.id = "clip-plane-panel";
+    clipPanel.innerHTML = `
+        <h3>Clipping Planes</h3>
+        <label>Vertical Clip (X-Axis):</label>
+        <input type="range" id="vertical-clip-slider" min="-13" max="7.5" step="0.01" value="-13">
+        <br>
+        <label>Horizontal Clip (Y-Axis):</label>
+        <input type="range" id="horizontal-clip-slider" min="-2" max="7" step="0.01" value="-2">
+    `;
+    document.body.appendChild(clipPanel);
+
+    // Style the clipping panel
+    clipPanel.style.border = "1px solid black"; // Black border
+    clipPanel.style.position = "absolute";
+    clipPanel.style.top = "10px";
+    clipPanel.style.right = "0px";
+    clipPanel.style.padding = "15px";
+    clipPanel.style.background = "rgba(92, 92, 92, 0.29)";
+    clipPanel.style.color = "white";
+    clipPanel.style.borderRadius = "8px 0 0 8px";
+    clipPanel.style.zIndex = "1000";
+    clipPanel.style.boxShadow = "-4px 4px 12px rgba(0, 0, 0, 0.5)";
+
+    // Update vertical clipping plane dynamically
+    document.getElementById("vertical-clip-slider").addEventListener("input", (event) => {
+        const newOrigin = parseFloat(event.target.value);
+        verticalClipPlane.setOrigin(newOrigin, 0, 0);
+        renderWindow.render();
+    });
+
+    // Update horizontal clipping plane dynamically
+    document.getElementById("horizontal-clip-slider").addEventListener("input", (event) => {
+        const newOrigin = parseFloat(event.target.value);
+        horizontalClipPlane.setOrigin(0, newOrigin, 0);
+        renderWindow.render();
+    });
+}
+
 // Load PLY files with correct representation modes and initial visibility
 loadPLYFile('pointcloud2.ply', 1.0, 'togglePointCloud', 'opacity-slider-pointcloud', 0, 0, true); // Points, visible
 loadPLYFile('Scanned.ply', 0.9, 'toggleScanned', 'opacity-slider-scanned', 2, 0, false); // Surface, visible
@@ -316,6 +389,7 @@ loadPLYFile('hull_new.ply', 0.4, 'toggleHull', 'opacity-slider-building-hull', 2
 loadPLYWithPointsAndLines('camera_line.ply', 1, [1, 1, 1], 3, [1, 0, 0])
 // Add UI controls
 fullScreenRenderer.addController(controlPanel);
+addClipPlaneControlPanel();
 
 setTimeout(() => {
     const panels = document.querySelectorAll("#viewer-container > div"); // Get all divs inside #viewer-container
@@ -335,6 +409,7 @@ setTimeout(() => {
         controlPanel.style.zIndex = "900";
         controlPanel.style.width = "300px"; // ✅ Fix: Set fixed width
         controlPanel.style.maxWidth = "300px"; // ✅ Prevents it from stretching
+        controlPanel.style.color = 'white';
         // Opacity effect on hover
         controlPanel.addEventListener("mouseenter", () => {
             controlPanel.style.opacity = "1";
