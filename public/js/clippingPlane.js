@@ -15,4 +15,11 @@ const horizontalClipPlane2 = vtkPlane.newInstance();
 horizontalClipPlane2.setNormal(0, -1, 0);
 horizontalClipPlane2.setOrigin(0, 7, 0);  // ✅ Set initial position of horizontal clip plane
 
-export {verticalClipPlane, verticalClipPlane2, horizontalClipPlane, horizontalClipPlane2}
+const zAxisClipPlane = vtkPlane.newInstance();
+zAxisClipPlane.setNormal(0, 0, -1);
+zAxisClipPlane.setOrigin(0, 0, 7);  // ✅ Set initial position of horizontal clip plane
+const zAxisClipPlane2 = vtkPlane.newInstance();
+zAxisClipPlane2.setNormal(0, 0, 1);
+zAxisClipPlane2.setOrigin(0, 0, -1.7);  // ✅ Set initial position of horizontal clip plane
+
+export {verticalClipPlane, verticalClipPlane2, horizontalClipPlane, horizontalClipPlane2, zAxisClipPlane, zAxisClipPlane2}

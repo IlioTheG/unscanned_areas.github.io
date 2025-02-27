@@ -1,4 +1,4 @@
-import { horizontalClipPlane, horizontalClipPlane2, verticalClipPlane, verticalClipPlane2 } from "./clippingPlane";
+import { horizontalClipPlane, horizontalClipPlane2, verticalClipPlane, verticalClipPlane2, zAxisClipPlane, zAxisClipPlane2 } from "./clippingPlane";
 import { renderWindow } from "./vtkRenderer";
 
 function addClipPlaneControlPanel() {
@@ -20,6 +20,13 @@ function addClipPlaneControlPanel() {
         <br>
         <label>Horizontal Clip (T->B):</label>
         <input type="range" id="horizontal-clip-slider-2" min="-2" max="7" step="0.01" value="7">
+        <br>
+        <label>Depth clip (N->F):</label>
+        <input type="range" id="z-axis-clip-slider" min="-1.7" max="7" step="0.1" value="7">
+        <br>
+        <label>Depth clip (F->N):</label>
+        <input type="range" id="z-axis-clip-slider-2" min="-1.7" max="7" step="0.01" value="-1.7">
+
     `;
     
     document.body.appendChild(clipPanel);
@@ -44,6 +51,17 @@ function addClipPlaneControlPanel() {
     document.getElementById("horizontal-clip-slider-2").addEventListener("input", (event) => {
         const newOrigin = parseFloat(event.target.value);
         horizontalClipPlane2.setOrigin(0, newOrigin, 0);
+        renderWindow.render();
+    });
+    
+    document.getElementById("z-axis-clip-slider").addEventListener("input", (event) => {
+        const newOrigin = parseFloat(event.target.value);
+        zAxisClipPlane.setOrigin(0, 0, newOrigin);
+        renderWindow.render();
+    });
+    document.getElementById("z-axis-clip-slider-2").addEventListener("input", (event) => {
+        const newOrigin = parseFloat(event.target.value);
+        zAxisClipPlane2.setOrigin(0, 0, newOrigin);
         renderWindow.render();
     });
 }
@@ -75,7 +93,7 @@ const layersPanel = `
         </tr>
         <tr>
             <td><div class="legend-box voidvoxels-color"></div></td>
-            <td><label><input type="checkbox" class="toggleVoidVoxels" /> Air</label></td>
+            <td><label><input type="checkbox" class="toggleVoidVoxels" /> Void voxels</label></td>
             <td><input type="range" id="opacity-slider-void-voxels" min="0" max="1" step="0.1" value="0.4"></td>
         </tr>
         <tr>

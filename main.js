@@ -1,6 +1,8 @@
 import '@kitware/vtk.js/Rendering/Profiles/Geometry';
 import { loadPLYFile, loadPLYWithPointsAndLines } from './public/js/plyLoader.js';
 import { addClipPlaneControlPanel } from './public/js/UI.js';
+import { renderer, renderWindow, fullScreenRenderer } from './public/js/vtkRenderer.js';
+
 
 // Load PLY files with correct representation modes and initial visibility
 loadPLYFile('pointcloud2.ply', 1.0, 'togglePointCloud', 'opacity-slider-pointcloud', 0, 0, true); // Points, visible

@@ -8,7 +8,7 @@ import vtkCellArray from '@kitware/vtk.js/Common/Core/CellArray';
 import { addGroupedControl } from "./utils";
 import { layersPanel } from "./UI";
 import { showLoadingScreen, hideLoadingScreen } from "../../loadingManager";
-import { horizontalClipPlane, horizontalClipPlane2, verticalClipPlane, verticalClipPlane2 } from "./clippingPlane";
+import { horizontalClipPlane, horizontalClipPlane2, verticalClipPlane, verticalClipPlane2, zAxisClipPlane, zAxisClipPlane2 } from "./clippingPlane";
 import { renderer, renderWindow, fullScreenRenderer } from "./vtkRenderer";
 /**
  * Function to load PLY files into the scene.
@@ -38,7 +38,9 @@ function loadPLYFile(filename, opacity, toggleClass, sliderId, representation = 
         mapper.addClippingPlane(verticalClipPlane2);   // ✅ Apply vertical clipping
         mapper.addClippingPlane(horizontalClipPlane); // ✅ Apply horizontal clipping
         mapper.addClippingPlane(horizontalClipPlane2); // ✅ Apply horizontal clipping
-        
+        mapper.addClippingPlane(zAxisClipPlane)
+        mapper.addClippingPlane(zAxisClipPlane2)
+
         const actor = vtkActor.newInstance();
         actor.setMapper(mapper);
         actor.getProperty().setOpacity(opacity);
@@ -130,6 +132,8 @@ function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1
         lineMapper.addClippingPlane(verticalClipPlane2);   // ✅ Apply vertical clipping
         lineMapper.addClippingPlane(horizontalClipPlane); // ✅ Apply horizontal clipping
         lineMapper.addClippingPlane(horizontalClipPlane2); // ✅ Apply horizontal clipping
+        lineMapper.addClippingPlane(zAxisClipPlane); // ✅ Apply horizontal clipping
+        lineMapper.addClippingPlane(zAxisClipPlane2); // ✅ Apply horizontal clipping
 
         const lineActor = vtkActor.newInstance();
         lineActor.setMapper(lineMapper);
@@ -161,6 +165,8 @@ function loadPLYWithPointsAndLines(filename, lineWidth = 2, lineColor = [1, 1, 1
         pointMapper.addClippingPlane(verticalClipPlane2);   // ✅ Apply vertical clipping
         pointMapper.addClippingPlane(horizontalClipPlane); // ✅ Apply horizontal clipping
         pointMapper.addClippingPlane(horizontalClipPlane2); // ✅ Apply horizontal clipping
+        pointMapper.addClippingPlane(zAxisClipPlane); // ✅ Apply horizontal clipping
+        pointMapper.addClippingPlane(zAxisClipPlane2); // ✅ Apply horizontal clipping
 
         const pointActor = vtkActor.newInstance();
         pointActor.setMapper(pointMapper);
