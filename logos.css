@@ -1,0 +1,44 @@
+.bottom-left-logo {
+    position: fixed; 
+    bottom: 20px; 
+    left: 20px; 
+    width: 60px; 
+    height: auto; 
+    opacity: 0.5;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.bottom-left-logo:hover {
+    opacity: 1; 
+}
+
+.tu-delft-logo {
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    width: 60px;
+    height: auto; 
+    opacity: 0.5; 
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tu-delft-logo:hover {
+    opacity: 1;
+}
+
+.gdmc-logo {
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: auto;
+    margin-right: auto;
+    width: 60px; 
+    height: auto; 
+    opacity: 0.5; 
+    transition: opacity 0.3s ease-in-out;
+}
+
+.gdmc-logo:hover {
+    opacity: 1; 
+}
